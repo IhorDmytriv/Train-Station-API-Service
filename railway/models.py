@@ -1,7 +1,8 @@
 from datetime import timedelta
 
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
-from rest_framework.exceptions import ValidationError
+from django.core.exceptions import ValidationError
 
 from train_station import settings
 
@@ -18,13 +19,23 @@ class TrainType(models.Model):
     name = models.CharField(max_length=255)
 
     def __str__(self):
-        return f"{self.name}"
+        return self.name
 
 
 class Train(models.Model):
     name = models.CharField(max_length=255)
-    cargo_num = models.IntegerField()
-    places_in_cargo = models.IntegerField()
+    cargo_num = models.IntegerField(
+        validators=[
+            MinValueValidator(1),
+            MaxValueValidator(20)
+        ]
+    )
+    places_in_cargo = models.IntegerField(
+        validators=[
+            MinValueValidator(1),
+            MaxValueValidator(100)
+        ]
+    )
     train_type = models.ForeignKey(
         TrainType,
         on_delete=models.CASCADE,
