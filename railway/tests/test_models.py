@@ -79,7 +79,7 @@ class ModelTests(TestCase):
     def test_station_str(self):
         station = self.station_a
         self.assertEqual(
-            str(station), f"{station.name} ({station.latitude}, {station.longitude})"
+            str(station), station.name
         )
 
     # Route Tests
