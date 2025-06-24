@@ -12,6 +12,7 @@ from railway.models import (
 )
 
 
+# Crew Serializers
 class CrewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Crew
@@ -22,6 +23,7 @@ class CrewSerializer(serializers.ModelSerializer):
         ]
 
 
+# Train Type Serializers
 class TrainTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = TrainType
@@ -31,20 +33,21 @@ class TrainTypeSerializer(serializers.ModelSerializer):
         ]
 
 
+# Train Serializers
 class TrainSerializer(serializers.ModelSerializer):
     class Meta:
         model = Train
         fields = [
             "id",
             "name",
+            "train_type",
             "cargo_num",
             "places_in_cargo",
-            "train_type",
             "capacity"
         ]
 
 
-class TrainListSerializer(serializers.ModelSerializer):
+class TrainListSerializer(TrainSerializer):
     type = serializers.SlugRelatedField(
         source="train_type",
         slug_field="name",
@@ -56,13 +59,18 @@ class TrainListSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "name",
+            "type",
             "cargo_num",
             "places_in_cargo",
-            "type",
             "capacity"
         ]
 
 
+class TrainDetailSerializer(TrainSerializer):
+    train_type = TrainTypeSerializer()
+
+
+# Station Serializers
 class StationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Station
@@ -74,6 +82,7 @@ class StationSerializer(serializers.ModelSerializer):
         ]
 
 
+# Route Serializers
 class RouteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Route
@@ -86,6 +95,7 @@ class RouteSerializer(serializers.ModelSerializer):
         ]
 
 
+# Journey Serializers
 class JourneySerializer(serializers.ModelSerializer):
     class Meta:
         model = Journey
@@ -100,6 +110,7 @@ class JourneySerializer(serializers.ModelSerializer):
         ]
 
 
+# Order Serializers
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
@@ -110,6 +121,7 @@ class OrderSerializer(serializers.ModelSerializer):
         ]
 
 
+# Ticket Serializers
 class TicketSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ticket
