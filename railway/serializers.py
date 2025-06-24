@@ -1,3 +1,4 @@
+from django.db.migrations import serializer
 from rest_framework import serializers
 
 from railway.models import (
@@ -96,14 +97,8 @@ class RouteSerializer(serializers.ModelSerializer):
 
 
 class RouteListSerializer(RouteSerializer):
-    source = serializers.SlugRelatedField(
-        slug_field="name",
-        read_only=True
-    )
-    destination = serializers.SlugRelatedField(
-        slug_field="name",
-        read_only=True
-    )
+    source = serializers.StringRelatedField()
+    destination = serializers.StringRelatedField()
 
     class Meta:
         model = Route

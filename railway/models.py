@@ -56,7 +56,7 @@ class Station(models.Model):
     longitude = models.FloatField()
 
     def __str__(self):
-        return f"{self.name} ({self.latitude}, {self.longitude})"
+        return self.name
 
 
 class Route(models.Model):
