@@ -12,6 +12,7 @@ from railway.models import (
 )
 from railway.serializers import (
     CrewSerializer,
+    CrewListSerializer,
     TrainTypeSerializer,
     TrainSerializer,
     JourneySerializer,
@@ -28,6 +29,11 @@ from railway.serializers import (
 class CrewViewSet(ModelViewSet):
     queryset = Crew.objects.all()
     serializer_class = CrewSerializer
+
+    def get_serializer_class(self):
+        if self.action == "list":
+            return CrewListSerializer
+        return CrewSerializer
 
 
 class TrainTypeViewSet(ModelViewSet):

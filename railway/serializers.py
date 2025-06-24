@@ -24,6 +24,15 @@ class CrewSerializer(serializers.ModelSerializer):
         ]
 
 
+class CrewListSerializer(CrewSerializer):
+    class Meta:
+        model = Crew
+        fields = [
+            "id",
+            "full_name"
+        ]
+
+
 # Train Type Serializers
 class TrainTypeSerializer(serializers.ModelSerializer):
     class Meta:
@@ -109,6 +118,7 @@ class RouteListSerializer(RouteSerializer):
             "destination",
             "distance"
         ]
+
 
 class RouteDetailSerializer(RouteSerializer):
     source = StationSerializer()
