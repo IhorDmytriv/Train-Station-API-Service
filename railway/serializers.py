@@ -110,6 +110,10 @@ class RouteListSerializer(RouteSerializer):
             "distance"
         ]
 
+class RouteDetailSerializer(RouteSerializer):
+    source = StationSerializer()
+    destination = StationSerializer()
+
 
 # Journey Serializers
 class JourneySerializer(serializers.ModelSerializer):

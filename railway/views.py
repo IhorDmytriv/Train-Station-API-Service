@@ -21,7 +21,7 @@ from railway.serializers import (
     TicketSerializer,
     TrainListSerializer,
     TrainDetailSerializer,
-    RouteListSerializer
+    RouteListSerializer, RouteDetailSerializer
 )
 
 
@@ -64,13 +64,15 @@ class RouteViewSet(ModelViewSet):
 
     def get_queryset(self):
         queryset = self.queryset
-        if self.action == "list":
+        if self.action in ["list", "retrieve"]:
             queryset = queryset.select_related("source", "destination")
         return queryset
 
     def get_serializer_class(self):
         if self.action == "list":
             return RouteListSerializer
+        if self.action == "retrieve":
+            return RouteDetailSerializer
         return self.serializer_class
 
 
