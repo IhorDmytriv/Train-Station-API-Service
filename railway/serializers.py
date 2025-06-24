@@ -1,4 +1,3 @@
-from django.db.migrations import serializer
 from rest_framework import serializers
 
 from railway.models import (
@@ -135,9 +134,40 @@ class JourneySerializer(serializers.ModelSerializer):
             "train",
             "departure_time",
             "arrival_time",
-            "crew",
             "travel_time",
+            "crew",
         ]
+
+
+class JourneyListSerializer(JourneySerializer):
+    route = serializers.SlugRelatedField(read_only=True, slug_field="name")
+    train = serializers.SlugRelatedField(read_only=True, slug_field="name")
+    train_type = serializers.CharField(
+        source="train.train_type.name",
+        read_only=True
+    )
+    travel_time_pretty = serializers.SerializerMethodField()
+    crew = serializers.StringRelatedField(many=True, read_only=True)
+
+    class Meta:
+        model = Journey
+        fields = [
+            "id",
+            "route",
+            "train",
+            "train_type",
+            "departure_time",
+            "arrival_time",
+            "travel_time_pretty",
+            "crew",
+        ]
+
+    def get_travel_time_pretty(self, obj):
+        td = obj.travel_time
+        total_minutes = int(td.total_seconds() // 60)
+        hours = total_minutes // 60
+        minutes = total_minutes % 60
+        return f"{hours}h {minutes}m" if hours else f"{minutes}m"
 
 
 # Order Serializers

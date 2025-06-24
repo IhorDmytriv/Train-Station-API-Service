@@ -78,7 +78,7 @@ class Route(models.Model):
     distance = models.IntegerField()
 
     def __str__(self):
-        return f"{self.name} ({self.source}, {self.destination})"
+        return self.name
 
 
 class Journey(models.Model):
