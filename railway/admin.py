@@ -13,7 +13,17 @@ from railway.models import (
 )
 
 
-models = [Journey, Crew, TrainType, Train, Station, Route, Order, Ticket]
+class TicketInline(admin.TabularInline):
+    model = Ticket
+    extra = 1
+
+
+@admin.register(Order)
+class OrderAdmin(admin.ModelAdmin):
+    inlines = [TicketInline,]
+
+
+models = [Journey, Crew, TrainType, Train, Station, Route, Ticket]
 for model in models:
     admin.site.register(model)
 
