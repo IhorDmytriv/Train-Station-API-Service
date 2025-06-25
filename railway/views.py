@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from rest_framework.exceptions import ParseError
 from rest_framework.viewsets import ModelViewSet
 
@@ -129,6 +131,59 @@ class JourneyViewSet(ModelViewSet):
 
     def get_queryset(self):
         queryset = self.queryset
+        route = self.request.query_params.get("route")
+        train = self.request.query_params.get("train")
+        departure_after = self.request.query_params.get("departure_after")
+        departure_before = self.request.query_params.get("departure_before")
+        arrival_after = self.request.query_params.get("arrival_after")
+        arrival_before = self.request.query_params.get("arrival_before")
+
+        if route:
+            queryset = queryset.filter(route__name__icontains=route)
+
+        if train:
+            queryset = queryset.filter(train__name__icontains=train)
+
+        if departure_after:
+            departure_after = (
+                datetime
+                .strptime(departure_after, "%Y-%m-%d").date()
+            )
+            queryset = (
+                queryset
+                .filter(departure_time__date__gte=departure_after)
+            )
+
+        if departure_before:
+            departure_before = (
+                datetime
+                .strptime(departure_before, "%Y-%m-%d").date()
+            )
+            queryset = (
+                queryset
+                .filter(departure_time__date__lte=departure_before)
+            )
+
+        if arrival_after:
+            arrival_after = (
+                datetime
+                .strptime(arrival_after, "%Y-%m-%d").date()
+            )
+            queryset = (
+                queryset
+                .filter(arrival_time__date__gte=arrival_after)
+            )
+
+        if arrival_before:
+            arrival_before = (
+                datetime
+                .strptime(arrival_before, "%Y-%m-%d").date()
+            )
+            queryset = (
+                queryset
+                .filter(arrival_time__date__lte=arrival_before)
+            )
+
         if self.action in ["list", "retrieve"]:
             queryset = (
                 queryset
