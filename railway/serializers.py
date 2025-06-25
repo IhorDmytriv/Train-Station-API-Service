@@ -93,6 +93,15 @@ class StationSerializer(serializers.ModelSerializer):
         ]
 
 
+class StationListSerializer(StationSerializer):
+    class Meta:
+        model = Station
+        fields = [
+            "id",
+            "name",
+        ]
+
+
 # Route Serializers
 class RouteSerializer(serializers.ModelSerializer):
     class Meta:
