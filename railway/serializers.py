@@ -223,16 +223,5 @@ class OrderSerializer(serializers.ModelSerializer):
             return order
 
 
-# Ticket Serializers
-class TicketSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Ticket
-        fields = [
-            "id",
-            "cargo",
-            "seat",
-            "journey",
-            "order"
-        ]
 class OrderListSerializer(OrderSerializer):
     tickets = serializers.StringRelatedField(many=True, read_only=True)
