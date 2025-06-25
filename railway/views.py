@@ -24,8 +24,9 @@ from railway.serializers import (
     JourneySerializer,
     JourneyListSerializer,
     JourneyDetailSerializer,
-    OrderSerializer,
     TicketSerializer,
+    OrderSerializer,
+    OrderListSerializer
 )
 
 
@@ -114,6 +115,23 @@ class JourneyViewSet(ModelViewSet):
 class OrderViewSet(ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
+
+    def get_serializer_class(self):
+        if self.action == "list":
+            return OrderListSerializer
+        return self.serializer_class
+
+    def get_queryset(self):
+        queryset = self.queryset.filter(user=self.request.user)
+        if self.action in ["list", "retrieve"]:
+            queryset = queryset.prefetch_related(
+                "tickets__journey__route",
+                "tickets__journey__train",
+            )
+        return queryset
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
 
 class TicketViewSet(ModelViewSet):
