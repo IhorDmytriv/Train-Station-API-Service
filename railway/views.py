@@ -1,3 +1,4 @@
+from rest_framework.exceptions import ParseError
 from rest_framework.viewsets import ModelViewSet
 
 from railway.models import (
@@ -49,9 +50,26 @@ class TrainViewSet(ModelViewSet):
     queryset = Train.objects.all()
     serializer_class = TrainSerializer
 
+    @staticmethod
+    def _params_to_ints(query_string: str) -> list[int]:
+        """Method to convert string parameters to a list of integers."""
+        try:
+            return list(map(int, query_string.split(',')))
+        except ValueError:
+            raise ParseError(
+                "train_type query parameter must contain "
+                "only integers separated by commas. exm:(1, 2)"
+            )
+
     def get_queryset(self):
         queryset = self.queryset
-        if self.action == "list":
+
+        train_type = self.request.query_params.get("train_type")
+        if train_type:
+            train_type = self._params_to_ints(train_type)
+            queryset = queryset.filter(train_type_id__in=train_type)
+
+        if self.action in ["list", "retrieve"]:
             queryset = queryset.select_related("train_type")
         return queryset
 
