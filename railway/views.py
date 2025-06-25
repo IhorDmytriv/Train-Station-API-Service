@@ -192,7 +192,7 @@ class JourneyViewSet(ModelViewSet):
                     "route__destination",
                     "train__train_type",
                 )
-                .prefetch_related("crew")
+                .prefetch_related("crew", "tickets")
             )
         return queryset
 

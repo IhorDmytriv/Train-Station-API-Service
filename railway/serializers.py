@@ -210,6 +210,9 @@ class JourneyDetailSerializer(JourneySerializer):
     train = TrainDetailSerializer(read_only=True)
     travel_time_pretty = serializers.SerializerMethodField()
     crew = CrewSerializer(many=True, read_only=True)
+    tickets = serializers.SlugRelatedField(
+        slug_field="cargo_and_seat", many=True, read_only=True
+    )
 
     class Meta:
         model = Journey
@@ -221,6 +224,7 @@ class JourneyDetailSerializer(JourneySerializer):
             "arrival_time",
             "travel_time",
             "travel_time_pretty",
+            "tickets",
             "crew",
         ]
 

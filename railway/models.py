@@ -150,6 +150,10 @@ class Ticket(models.Model):
         related_name="tickets",
     )
 
+    @property
+    def cargo_and_seat(self):
+        return f"Cargo {self.cargo}, Seat {self.seat}"
+
     @staticmethod
     def validate_ticket(cargo, seat, train, error_to_raise):
         for ticket_attr_value, ticket_attr_name, train_attr_name in [
