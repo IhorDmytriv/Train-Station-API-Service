@@ -6,6 +6,9 @@ from django.core.exceptions import ValidationError
 
 from train_station import settings
 
+MAX_CARGO_NUM = 20
+MAX_PLACES_IN_CARGO = 100
+
 
 class Crew(models.Model):
     first_name = models.CharField(max_length=255)
@@ -31,13 +34,13 @@ class Train(models.Model):
     cargo_num = models.IntegerField(
         validators=[
             MinValueValidator(1),
-            MaxValueValidator(20)
+            MaxValueValidator(MAX_CARGO_NUM)
         ]
     )
     places_in_cargo = models.IntegerField(
         validators=[
             MinValueValidator(1),
-            MaxValueValidator(100)
+            MaxValueValidator(MAX_PLACES_IN_CARGO)
         ]
     )
     train_type = models.ForeignKey(
