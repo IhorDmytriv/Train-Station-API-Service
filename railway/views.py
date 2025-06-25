@@ -23,6 +23,7 @@ from railway.serializers import (
     RouteDetailSerializer,
     JourneySerializer,
     JourneyListSerializer,
+    JourneyDetailSerializer,
     OrderSerializer,
     TicketSerializer,
 )
@@ -90,10 +91,14 @@ class JourneyViewSet(ModelViewSet):
 
     def get_queryset(self):
         queryset = self.queryset
-        if self.action == "list":
+        if self.action in ["list", "retrieve"]:
             queryset = (
                 queryset
-                .select_related("route", "train__train_type",)
+                .select_related(
+                    "route__source",
+                    "route__destination",
+                    "train__train_type",
+                )
                 .prefetch_related("crew")
             )
         return queryset
@@ -101,6 +106,8 @@ class JourneyViewSet(ModelViewSet):
     def get_serializer_class(self):
         if self.action == "list":
             return JourneyListSerializer
+        if self.action == "retrieve":
+            return JourneyDetailSerializer
         return self.serializer_class
 
 

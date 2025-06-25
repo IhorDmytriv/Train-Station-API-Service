@@ -138,6 +138,13 @@ class JourneySerializer(serializers.ModelSerializer):
             "crew",
         ]
 
+    def get_travel_time_pretty(self, obj):
+        td = obj.travel_time
+        total_minutes = int(td.total_seconds() // 60)
+        hours = total_minutes // 60
+        minutes = total_minutes % 60
+        return f"{hours}h {minutes}m" if hours else f"{minutes}m"
+
 
 class JourneyListSerializer(JourneySerializer):
     route = serializers.SlugRelatedField(read_only=True, slug_field="name")
@@ -162,12 +169,25 @@ class JourneyListSerializer(JourneySerializer):
             "crew",
         ]
 
-    def get_travel_time_pretty(self, obj):
-        td = obj.travel_time
-        total_minutes = int(td.total_seconds() // 60)
-        hours = total_minutes // 60
-        minutes = total_minutes % 60
-        return f"{hours}h {minutes}m" if hours else f"{minutes}m"
+
+class JourneyDetailSerializer(JourneySerializer):
+    route = RouteDetailSerializer(read_only=True)
+    train = TrainDetailSerializer(read_only=True)
+    travel_time_pretty = serializers.SerializerMethodField()
+    crew = CrewSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Journey
+        fields = [
+            "id",
+            "route",
+            "train",
+            "departure_time",
+            "arrival_time",
+            "travel_time",
+            "travel_time_pretty",
+            "crew",
+        ]
 
 
 # Order Serializers
