@@ -102,6 +102,30 @@ class StationListSerializer(StationSerializer):
         ]
 
 
+class StationDetailSerializer(StationSerializer):
+    routes_from = serializers.SlugRelatedField(
+        many=True,
+        slug_field="name",
+        read_only=True
+    )
+    routes_to = serializers.SlugRelatedField(
+        many=True,
+        slug_field="name",
+        read_only=True
+    )
+
+    class Meta:
+        model = Station
+        fields = [
+            "id",
+            "name",
+            "latitude",
+            "longitude",
+            "routes_from",
+            "routes_to"
+        ]
+
+
 # Route Serializers
 class RouteSerializer(serializers.ModelSerializer):
     class Meta:

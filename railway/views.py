@@ -20,6 +20,7 @@ from railway.serializers import (
     TrainDetailSerializer,
     StationSerializer,
     StationListSerializer,
+    StationDetailSerializer,
     RouteSerializer,
     RouteListSerializer,
     RouteDetailSerializer,
@@ -91,11 +92,16 @@ class StationViewSet(ModelViewSet):
         name = self.request.query_params.get("name")
         if name:
             queryset = Station.objects.filter(name__icontains=name)
+
+        if self.action in ["list", "retrieve"]:
+            queryset = queryset.prefetch_related("routes_from", "routes_to")
         return queryset
 
     def get_serializer_class(self):
         if self.action == "list":
             return StationListSerializer
+        if self.action == "retrieve":
+            return StationDetailSerializer
         return self.serializer_class
 
 
