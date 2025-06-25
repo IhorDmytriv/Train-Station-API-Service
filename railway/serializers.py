@@ -190,6 +190,7 @@ class JourneyListSerializer(JourneySerializer):
     )
     travel_time_pretty = serializers.SerializerMethodField()
     crew = serializers.StringRelatedField(many=True, read_only=True)
+    tickets_available = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Journey
@@ -201,6 +202,7 @@ class JourneyListSerializer(JourneySerializer):
             "departure_time",
             "arrival_time",
             "travel_time_pretty",
+            "tickets_available",
             "crew",
         ]
 

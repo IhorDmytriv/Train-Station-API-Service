@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from django.db.models import Count, F
 from rest_framework.exceptions import ParseError
 from rest_framework.viewsets import ModelViewSet
 
@@ -193,8 +194,14 @@ class JourneyViewSet(ModelViewSet):
                     "train__train_type",
                 )
                 .prefetch_related("crew", "tickets")
+                .annotate(
+                    tickets_available=(
+                        F("train__cargo_num") * F("train__places_in_cargo")
+                        - Count("tickets")
+                    )
+                )
             )
-        return queryset
+        return queryset.distinct()
 
     def get_serializer_class(self):
         if self.action == "list":
