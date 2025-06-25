@@ -99,12 +99,22 @@ class Journey(models.Model):
     arrival_time = models.DateTimeField()
     crew = models.ManyToManyField(Crew, related_name="journeys")
 
-    class Meta:
-        ordering = ["departure_time"]
-
     @property
     def travel_time(self) -> timedelta:
         return self.arrival_time - self.departure_time
+
+    def clean(self):
+        if self.arrival_time <= self.departure_time:
+            raise ValidationError({
+                "arrival_time": "Arrival time must be after departure time."
+            })
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
+
+    class Meta:
+        ordering = ["departure_time"]
 
     def __str__(self):
         return f"Route: {self.route.name} Train: {self.train.name}"

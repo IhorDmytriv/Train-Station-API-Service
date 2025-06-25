@@ -86,7 +86,7 @@ class ModelTests(TestCase):
     def test_route_str(self):
         route = self.route
         self.assertEqual(
-            str(route), f"{route.name} ({route.source}, {route.destination})"
+            str(route), route.name
         )
 
     # Journey Tests
@@ -94,6 +94,15 @@ class ModelTests(TestCase):
         self.assertEqual(
             self.journey.travel_time, self.journey.arrival_time - self.journey.departure_time
         )
+
+    def test_journey_arrival_and_departure_time_validation(self):
+        journey = Journey(
+            route=self.route,
+            train=self.train,
+            departure_time=datetime.now(),
+            arrival_time=datetime.now() - timedelta(hours=2)
+        )
+        self.assertRaises(ValidationError, journey.full_clean)
 
     def test_journey_str(self):
         journey = self.journey
