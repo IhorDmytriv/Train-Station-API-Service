@@ -13,7 +13,6 @@ from railway.models import (
     Route,
     Journey,
     Order,
-    Ticket
 )
 from railway.serializers import (
     CrewSerializer,
@@ -31,7 +30,6 @@ from railway.serializers import (
     JourneySerializer,
     JourneyListSerializer,
     JourneyDetailSerializer,
-    TicketSerializer,
     OrderSerializer,
     OrderListSerializer
 )
@@ -237,8 +235,3 @@ class OrderViewSet(ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
-
-
-class TicketViewSet(ModelViewSet):
-    queryset = Ticket.objects.all()
-    serializer_class = TicketSerializer
