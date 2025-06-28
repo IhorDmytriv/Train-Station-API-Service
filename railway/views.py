@@ -2,6 +2,7 @@ from datetime import datetime
 
 from django.db.models import Count, F
 from rest_framework.exceptions import ParseError
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.viewsets import ModelViewSet
 
 from railway.models import (
@@ -214,6 +215,11 @@ class JourneyViewSet(ModelViewSet):
 class OrderViewSet(ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
+
+    def get_permissions(self):
+        if self.action == "destroy":
+            return (IsAdminUser(),)
+        return (IsAuthenticated(),)
 
     def get_serializer_class(self):
         if self.action == "list":
