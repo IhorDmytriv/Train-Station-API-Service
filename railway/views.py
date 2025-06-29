@@ -1,6 +1,12 @@
 from datetime import datetime
 
 from django.db.models import Count, F
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import (
+    extend_schema,
+    OpenApiParameter,
+    OpenApiExample
+)
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.exceptions import ParseError
@@ -90,6 +96,19 @@ class TrainViewSet(ModelViewSet):
             return TrainImageSerializer
         return self.serializer_class
 
+    @extend_schema(
+        request=TrainImageSerializer,
+        responses={200: TrainImageSerializer},
+        description="Upload or update an image for a specific train.",
+        examples=[
+            OpenApiExample(
+                name="Image upload example",
+                value={"image": "train_images/blue_train.jpg"},
+                summary="Train image upload",
+                description="Upload an image file for the selected train."
+            )
+        ],
+    )
     @action(
         methods=["POST"],
         detail=True,
@@ -101,6 +120,38 @@ class TrainViewSet(ModelViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                name="train_type",
+                type=OpenApiTypes.STR,
+                location=OpenApiParameter.QUERY,
+                description=(
+                    "Comma-separated list of train type IDs to filter. "
+                    "Example: `1,2,3`"
+                ),
+                examples=[
+                    OpenApiExample(
+                        name="Filter example",
+                        value="1,2",
+                        summary="Filter by multiple train type IDs",
+                        description=(
+                            "Only return trains that "
+                            "match the given train_type IDs."
+                        ),
+                    )
+                ],
+            ),
+        ],
+        responses={200: TrainListSerializer},
+        description=(
+            "Returns a list of trains. "
+            "You can filter by `train_type` ID using a comma-separated string."
+        ),
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 
 
 class StationViewSet(ModelViewSet):
@@ -123,6 +174,27 @@ class StationViewSet(ModelViewSet):
         if self.action == "retrieve":
             return StationDetailSerializer
         return self.serializer_class
+
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                name="name",
+                type=OpenApiTypes.STR,
+                location=OpenApiParameter.QUERY,
+                description=(
+                    "Filter stations by name "
+                    "(case-insensitive, partial match allowed)."
+                ),
+            ),
+        ],
+        description=(
+            "Returns a list of stations. "
+            "Supports filtering by the `name` query parameter."
+        ),
+        responses={200: StationListSerializer(many=True)},
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 
 
 class RouteViewSet(ModelViewSet):
@@ -226,6 +298,68 @@ class JourneyViewSet(ModelViewSet):
         if self.action == "retrieve":
             return JourneyDetailSerializer
         return self.serializer_class
+
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                name="route",
+                type=OpenApiTypes.STR,
+                location=OpenApiParameter.QUERY,
+                description=(
+                    "Filter journeys by route name "
+                    "(case-insensitive, partial match)."
+                ),
+            ),
+            OpenApiParameter(
+                name="train",
+                type=OpenApiTypes.STR,
+                location=OpenApiParameter.QUERY,
+                description=(
+                    "Filter journeys by train name "
+                    "(case-insensitive, partial match)."
+                ),
+            ),
+            OpenApiParameter(
+                name="departure_after",
+                type=OpenApiTypes.DATE,
+                location=OpenApiParameter.QUERY,
+                description=(
+                    "Filter journeys that depart after this date (inclusive)."
+                ),
+            ),
+            OpenApiParameter(
+                name="departure_before",
+                type=OpenApiTypes.DATE,
+                location=OpenApiParameter.QUERY,
+                description=(
+                    "Filter journeys that depart before this date (inclusive)."
+                ),
+            ),
+            OpenApiParameter(
+                name="arrival_after",
+                type=OpenApiTypes.DATE,
+                location=OpenApiParameter.QUERY,
+                description=(
+                    "Filter journeys that arrive after this date (inclusive)."
+                ),
+            ),
+            OpenApiParameter(
+                name="arrival_before",
+                type=OpenApiTypes.DATE,
+                location=OpenApiParameter.QUERY,
+                description=(
+                    "Filter journeys that arrive before this date (inclusive)."
+                ),
+            ),
+        ],
+        description=(
+            "List all journeys, "
+            "optionally filtered by route, train, or date ranges."
+        ),
+        responses={200: JourneyListSerializer(many=True)},
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 
 
 class OrderViewSet(ModelViewSet):
