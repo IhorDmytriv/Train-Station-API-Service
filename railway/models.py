@@ -33,7 +33,10 @@ class TrainType(models.Model):
 
 
 def train_image_path(instance: "Train", filename: str) -> pathlib.Path:
-    filename = f"{slugify(instance.name)}-{uuid.uuid4()}" + pathlib.Path(filename).suffix
+    filename = (
+        f"{slugify(instance.name)}-{uuid.uuid4()}"
+        + pathlib.Path(filename).suffix
+    )
     return pathlib.Path("upload/trains/") / pathlib.Path(filename)
 
 
