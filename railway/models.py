@@ -1,8 +1,11 @@
+import pathlib
+import uuid
 from datetime import timedelta
 
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.core.exceptions import ValidationError
+from django.utils.text import slugify
 
 from train_station import settings
 
@@ -29,6 +32,11 @@ class TrainType(models.Model):
         return self.name
 
 
+def train_image_path(instance: "Train", filename: str) -> pathlib.Path:
+    filename = f"{slugify(instance.name)}-{uuid.uuid4()}" + pathlib.Path(filename).suffix
+    return pathlib.Path("upload/trains/") / pathlib.Path(filename)
+
+
 class Train(models.Model):
     name = models.CharField(max_length=255)
     cargo_num = models.IntegerField(
@@ -47,6 +55,11 @@ class Train(models.Model):
         TrainType,
         on_delete=models.CASCADE,
         related_name="trains",
+    )
+    image = models.ImageField(
+        null=True,
+        blank=True,
+        upload_to=train_image_path,
     )
 
     @property
