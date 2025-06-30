@@ -10,6 +10,7 @@ from railway.serializers import TrainTypeSerializer
 
 TRAIN_TYPE_URL = reverse("railway:traintype-list")
 
+
 def sample_train_type(**params):
     defaults = {
         "name": "Sample train type",
@@ -17,6 +18,7 @@ def sample_train_type(**params):
     defaults.update(params)
 
     return TrainType.objects.create(**defaults)
+
 
 def detail_url(train_type_id):
     return reverse("railway:traintype-detail", args=[train_type_id])
@@ -43,9 +45,9 @@ class AuthenticatedTrainApiTests(TestCase):
         self.client.force_login(self.user)
 
     def test_list_train_types_returns_all_train_types(self):
-        train_type_1 = sample_train_type(name="Sample train_type 1")
+        sample_train_type(name="Sample train_type 1")
 
-        train_type_2 = sample_train_type(name="Sample train_type 2")
+        sample_train_type(name="Sample train_type 2")
 
         response = self.client.get(TRAIN_TYPE_URL)
         train_types = TrainType.objects.all()

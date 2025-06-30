@@ -6,9 +6,13 @@ from rest_framework import status
 from rest_framework.test import APIClient
 
 from railway.models import Station
-from railway.serializers import StationSerializer, StationListSerializer, StationDetailSerializer
+from railway.serializers import (
+    StationListSerializer,
+    StationDetailSerializer
+)
 
 STATION_URL = reverse("railway:station-list")
+
 
 def sample_station(**params):
     defaults = {
@@ -19,6 +23,7 @@ def sample_station(**params):
     defaults.update(params)
 
     return Station.objects.create(**defaults)
+
 
 def detail_url(station_id):
     return reverse("railway:station-detail", args=[station_id])
@@ -45,9 +50,9 @@ class AuthenticatedStationApiTests(TestCase):
         self.client.force_login(self.user)
 
     def test_list_stations_returns_all_stations(self):
-        station_1 = sample_station(name="Station 1")
+        sample_station(name="Station 1")
 
-        station_2 = sample_station(name="Station 2")
+        sample_station(name="Station 2")
 
         response = self.client.get(STATION_URL)
         stations = Station.objects.all()

@@ -5,9 +5,13 @@ from rest_framework import status
 from rest_framework.test import APIClient
 
 from railway.models import Route, Station
-from railway.serializers import RouteSerializer, RouteListSerializer, RouteDetailSerializer
+from railway.serializers import (
+    RouteListSerializer,
+    RouteDetailSerializer
+)
 
 ROUTE_URL = reverse("railway:route-list")
+
 
 def sample_station(**params):
     defaults = {
@@ -18,9 +22,12 @@ def sample_station(**params):
     defaults.update(params)
     return Station.objects.create(**defaults)
 
+
 def sample_route(**params):
     source = params.pop("source", sample_station(name="Source Station"))
-    destination = params.pop("destination", sample_station(name="Destination Station"))
+    destination = params.pop(
+        "destination", sample_station(name="Destination Station")
+    )
 
     defaults = {
         "name": "Sample Route",
@@ -31,6 +38,7 @@ def sample_route(**params):
     defaults.update(params)
 
     return Route.objects.create(**defaults)
+
 
 def detail_url(route_id):
     return reverse("railway:route-detail", args=[route_id])
@@ -57,8 +65,8 @@ class AuthenticatedRouteApiTests(TestCase):
         self.client.force_login(self.user)
 
     def test_list_routes_returns_all_routes(self):
-        route_1 = sample_route(name="Route 1")
-        route_2 = sample_route(name="Route 2")
+        sample_route(name="Route 1")
+        sample_route(name="Route 2")
 
         response = self.client.get(ROUTE_URL)
         routes = Route.objects.all()

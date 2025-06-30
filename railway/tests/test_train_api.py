@@ -23,6 +23,7 @@ def sample_train_type(**params):
 
     return TrainType.objects.create(**defaults)
 
+
 def sample_train(**params):
     if "train_type" in params:
         train_type = params.pop("train_type")
@@ -43,8 +44,10 @@ def image_upload_url(train_id):
     """Return URL for recipe image upload"""
     return reverse("railway:train-upload-image", args=[train_id])
 
+
 def detail_url(train_id):
     return reverse("railway:train-detail", args=[train_id])
+
 
 class UnauthenticatedTrainApiTests(TestCase):
 
@@ -54,6 +57,7 @@ class UnauthenticatedTrainApiTests(TestCase):
     def test_auth_required(self):
         response = self.client.get(TRAIN_URL)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
 
 class AuthenticatedTrainApiTests(TestCase):
 
@@ -67,10 +71,9 @@ class AuthenticatedTrainApiTests(TestCase):
         self.train_type = sample_train_type(name="Train type")
 
     def test_list_trains_returns_all_trains(self):
-        train_1 = sample_train(name="Sample train 1", train_type=self.train_type)
+        sample_train(name="Sample train 1", train_type=self.train_type)
 
-        train_2 = sample_train(name="Sample train 2", train_type=self.train_type)
-
+        sample_train(name="Sample train 2", train_type=self.train_type)
 
         response = self.client.get(TRAIN_URL)
         trains = Train.objects.all()
@@ -180,7 +183,9 @@ class TrainImageUploadTests(TestCase):
         )
         self.client.force_login(self.user)
         self.train_type = sample_train_type(name="Train type")
-        self.train = sample_train(name="Sample train", train_type=self.train_type)
+        self.train = sample_train(
+            name="Sample train", train_type=self.train_type
+        )
 
     def tearDown(self):
         self.train.image.delete()
@@ -192,7 +197,11 @@ class TrainImageUploadTests(TestCase):
             img = Image.new("RGB", (10, 10))
             img.save(ntf, format="JPEG")
             ntf.seek(0)
-            response = self.client.post(url, {"image": ntf}, format="multipart")
+            response = self.client.post(
+                url,
+                {"image": ntf},
+                format="multipart"
+            )
         self.train.refresh_from_db()
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -202,7 +211,11 @@ class TrainImageUploadTests(TestCase):
     def test_upload_image_bad_request(self):
         """Test uploading an invalid image"""
         url = image_upload_url(self.train.id)
-        response = self.client.post(url, {"image": "not image"}, format="multipart")
+        response = self.client.post(
+            url,
+            {"image": "not image"},
+            format="multipart"
+        )
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 

@@ -10,6 +10,7 @@ from railway.serializers import CrewListSerializer, CrewSerializer
 
 CREW_URL = reverse("railway:crew-list")
 
+
 def sample_crew(**params):
     defaults = {
         "first_name": "First name",
@@ -19,8 +20,10 @@ def sample_crew(**params):
 
     return Crew.objects.create(**defaults)
 
+
 def detail_url(crew_id):
     return reverse("railway:crew-detail", args=[crew_id])
+
 
 class UnauthenticatedTrainApiTests(TestCase):
 
@@ -43,10 +46,15 @@ class AuthenticatedTrainApiTests(TestCase):
         self.client.force_login(self.user)
 
     def test_list_crew_returns_all_crews(self):
-        crew_1 = sample_crew(first_name="Crew name 1", last_name="Crew last name 1")
+        sample_crew(
+            first_name="Crew name 1",
+            last_name="Crew last name 1"
+        )
 
-        crew_2 = sample_crew(first_name="Crew name 2", last_name="Crew last name 2")
-
+        sample_crew(
+            first_name="Crew name 2",
+            last_name="Crew last name 2"
+        )
 
         response = self.client.get(CREW_URL)
         crews = Crew.objects.all()

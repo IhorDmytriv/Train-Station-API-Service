@@ -4,7 +4,16 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 
-from railway.models import Journey, Crew, TrainType, Train, Station, Route, Order, Ticket
+from railway.models import (
+    Journey,
+    Crew,
+    TrainType,
+    Train,
+    Station,
+    Route,
+    Order,
+    Ticket
+)
 
 
 class ModelTests(TestCase):
@@ -22,8 +31,12 @@ class ModelTests(TestCase):
             places_in_cargo=20,
             train_type=self.train_type
         )
-        self.station_a = Station.objects.create(name="Station A", latitude=45.0, longitude=24.0)
-        self.station_b = Station.objects.create(name="Station B", latitude=46.0, longitude=25.0)
+        self.station_a = Station.objects.create(
+            name="Station A", latitude=45.0, longitude=24.0
+        )
+        self.station_b = Station.objects.create(
+            name="Station B", latitude=46.0, longitude=25.0
+        )
         self.route = Route.objects.create(
             name="Route A-B",
             source=self.station_a,
@@ -44,7 +57,10 @@ class ModelTests(TestCase):
 
     # Crew Tests
     def test_crew_str(self):
-        self.assertEqual(str(self.crew), f"{self.crew.first_name} {self.crew.last_name}")
+        self.assertEqual(
+            str(self.crew),
+            f"{self.crew.first_name} {self.crew.last_name}"
+        )
 
     # TrainType Tests
     def test_train_type_str(self):
@@ -64,16 +80,22 @@ class ModelTests(TestCase):
         train = Train(
             name="MiniTrain",
             cargo_num=10,
-            places_in_cargo=0, # < 1
+            places_in_cargo=0,  # < 1
             train_type=self.train_type
         )
         self.assertRaises(ValidationError, train.full_clean)
 
     def test_train_capacity_attribute(self):
-        self.assertEqual(self.train.capacity, self.train.places_in_cargo * self.train.cargo_num)
+        self.assertEqual(
+            self.train.capacity,
+            self.train.places_in_cargo * self.train.cargo_num
+        )
 
     def test_train_str(self):
-        self.assertEqual(str(self.train), f"{self.train.name} capacity: {self.train.capacity}")
+        self.assertEqual(
+            str(self.train),
+            f"{self.train.name} capacity: {self.train.capacity}"
+        )
 
     # Station Tests
     def test_station_str(self):
@@ -92,7 +114,8 @@ class ModelTests(TestCase):
     # Journey Tests
     def test_journey_travel_time_attribute(self):
         self.assertEqual(
-            self.journey.travel_time, self.journey.arrival_time - self.journey.departure_time
+            self.journey.travel_time,
+            self.journey.arrival_time - self.journey.departure_time
         )
 
     def test_journey_arrival_and_departure_time_validation(self):
@@ -106,13 +129,19 @@ class ModelTests(TestCase):
 
     def test_journey_str(self):
         journey = self.journey
-        self.assertEqual(str(journey), f"Route: {self.route.name} Train: {self.train.name}")
+        self.assertEqual(
+            str(journey),
+            f"Route: {self.route.name} Train: {self.train.name}"
+        )
 
     # Order Tests
     def test_order_str(self):
         order = self.order
         user_name = f"{order.user.first_name} {order.user.last_name}"
-        self.assertEqual(str(order), f"Order(№{order.id}) {user_name}: {order.created_at}")
+        self.assertEqual(
+            str(order),
+            f"Order(№{order.id}) {user_name}: {order.created_at}"
+        )
 
     # Ticket Tests
     def test_ticket_cargo_too_high_raises_error(self):
@@ -142,7 +171,10 @@ class ModelTests(TestCase):
             journey=self.journey,
             order=self.order,
         )
-        self.assertEqual(str(ticket),f"{ticket.journey} (cargo: {ticket.cargo} seat: {ticket.seat})")
+        self.assertEqual(
+            str(ticket),
+            f"{ticket.journey} (cargo: {ticket.cargo} seat: {ticket.seat})"
+        )
 
     def test_ticket_valid_data_saves_correctly(self):
         ticket = Ticket(
@@ -158,7 +190,14 @@ class ModelTests(TestCase):
             self.fail("Valid ticket raised ValidationError unexpectedly!")
 
     def test_ticket_unique_constraint(self):
-        Ticket.objects.create(cargo=1, seat=1, journey=self.journey, order=self.order)
+        Ticket.objects.create(
+            cargo=1, seat=1, journey=self.journey, order=self.order
+        )
         with self.assertRaises(ValidationError):
-            ticket = Ticket(cargo=1, seat=1, journey=self.journey, order=self.order)
+            ticket = Ticket(
+                cargo=1,
+                seat=1,
+                journey=self.journey,
+                order=self.order
+            )
             ticket.full_clean()

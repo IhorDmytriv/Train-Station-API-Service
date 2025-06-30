@@ -34,7 +34,9 @@ def sample_train(name="Train", train_type=None):
 def sample_route(name="Route"):
     source = sample_station(name="Source")
     destination = sample_station(name="Destination")
-    return Route.objects.create(name=name, source=source, destination=destination, distance=100)
+    return Route.objects.create(
+        name=name, source=source, destination=destination, distance=100
+    )
 
 
 def sample_crew(name="John"):
@@ -88,12 +90,16 @@ class AuthenticatedJourneyApiTests(TestCase):
 
     def test_list_journeys(self):
         train = sample_train(train_type=self.train_type)
-        journey1 = sample_journey(train=train)
-        journey2 = sample_journey(train=train)
+        sample_journey(train=train)
+        sample_journey(train=train)
 
         response = self.client.get(JOURNEY_URL)
         journeys = Journey.objects.all().annotate(
-            tickets_available=F("train__cargo_num") * F("train__places_in_cargo") - Count("tickets")
+            tickets_available=(
+                F("train__cargo_num")
+                * F("train__places_in_cargo")
+                - Count("tickets")
+            )
         )
         serializer = JourneyListSerializer(journeys, many=True)
 
@@ -101,8 +107,12 @@ class AuthenticatedJourneyApiTests(TestCase):
         self.assertEqual(response.data["results"], serializer.data)
 
     def test_filter_by_train_name(self):
-        train_1 = sample_train(name="FilteredTrain", train_type=self.train_type)
-        train_2 = sample_train(name="OtherTrain", train_type=self.train_type)
+        train_1 = sample_train(
+            name="FilteredTrain", train_type=self.train_type
+        )
+        train_2 = sample_train(
+            name="OtherTrain", train_type=self.train_type
+        )
         sample_journey(train=train_1)
         sample_journey(train=train_2)
 
