@@ -3,68 +3,68 @@
     "model": "railway.crew",
     "pk": 1,
     "fields": {
-      "first_name": "First1",
-      "last_name": "Last1"
+      "first_name": "Oleksandr",
+      "last_name": "Shevchenko"
     }
   },
   {
     "model": "railway.crew",
     "pk": 2,
     "fields": {
-      "first_name": "First2",
-      "last_name": "Last2"
+      "first_name": "Natalia",
+      "last_name": "Kovalenko"
     }
   },
   {
     "model": "railway.crew",
     "pk": 3,
     "fields": {
-      "first_name": "First3",
-      "last_name": "Last3"
+      "first_name": "Ivan",
+      "last_name": "Melnyk"
     }
   },
   {
     "model": "railway.crew",
     "pk": 4,
     "fields": {
-      "first_name": "First4",
-      "last_name": "Last4"
+      "first_name": "Sofia",
+      "last_name": "Bondarenko"
     }
   },
   {
     "model": "railway.crew",
     "pk": 5,
     "fields": {
-      "first_name": "First5",
-      "last_name": "Last5"
+      "first_name": "Dmytro",
+      "last_name": "Tkachenko"
     }
   },
   {
     "model": "railway.traintype",
     "pk": 1,
     "fields": {
-      "name": "Type1"
+      "name": "Passenger"
     }
   },
   {
     "model": "railway.traintype",
     "pk": 2,
     "fields": {
-      "name": "Type2"
+      "name": "Freight"
     }
   },
   {
     "model": "railway.traintype",
     "pk": 3,
     "fields": {
-      "name": "Type3"
+      "name": "High-speed"
     }
   },
   {
     "model": "railway.train",
     "pk": 1,
     "fields": {
-      "name": "Train1",
+      "name": "InterCity 101",
       "cargo_num": 4,
       "places_in_cargo": 83,
       "train_type": 3
@@ -74,17 +74,17 @@
     "model": "railway.train",
     "pk": 2,
     "fields": {
-      "name": "Train2",
+      "name": "Cargo Express",
       "cargo_num": 10,
       "places_in_cargo": 94,
-      "train_type": 3
+      "train_type": 2
     }
   },
   {
     "model": "railway.train",
     "pk": 3,
     "fields": {
-      "name": "Train3",
+      "name": "Regional 45",
       "cargo_num": 3,
       "places_in_cargo": 83,
       "train_type": 1
@@ -94,7 +94,7 @@
     "model": "railway.train",
     "pk": 4,
     "fields": {
-      "name": "Train4",
+      "name": "Freight 007",
       "cargo_num": 5,
       "places_in_cargo": 69,
       "train_type": 2
@@ -104,7 +104,7 @@
     "model": "railway.train",
     "pk": 5,
     "fields": {
-      "name": "Train5",
+      "name": "Local Shuttle",
       "cargo_num": 8,
       "places_in_cargo": 57,
       "train_type": 1
@@ -114,75 +114,75 @@
     "model": "railway.station",
     "pk": 1,
     "fields": {
-      "name": "Station1",
-      "latitude": 48.71,
-      "longitude": 21.21
+      "name": "Kyiv Central",
+      "latitude": 50.4501,
+      "longitude": 30.5234
     }
   },
   {
     "model": "railway.station",
     "pk": 2,
     "fields": {
-      "name": "Station2",
-      "latitude": 48.72,
-      "longitude": 21.22
+      "name": "Lviv Main",
+      "latitude": 49.8397,
+      "longitude": 24.0297
     }
   },
   {
     "model": "railway.station",
     "pk": 3,
     "fields": {
-      "name": "Station3",
-      "latitude": 48.73,
-      "longitude": 21.23
+      "name": "Odesa Terminal",
+      "latitude": 46.4825,
+      "longitude": 30.7233
     }
   },
   {
     "model": "railway.station",
     "pk": 4,
     "fields": {
-      "name": "Station4",
-      "latitude": 48.74,
-      "longitude": 21.24
+      "name": "Kharkiv Hub",
+      "latitude": 49.9935,
+      "longitude": 36.2304
     }
   },
   {
     "model": "railway.station",
     "pk": 5,
     "fields": {
-      "name": "Station5",
-      "latitude": 48.75,
-      "longitude": 21.25
+      "name": "Dnipro Central",
+      "latitude": 48.4647,
+      "longitude": 35.0462
     }
   },
   {
     "model": "railway.route",
     "pk": 1,
     "fields": {
-      "name": "Route1",
-      "source": 2,
-      "destination": 3,
-      "distance": 201
+      "name": "Kyiv-Lviv Express",
+      "source": 1,
+      "destination": 2,
+      "distance": 540
     }
   },
   {
     "model": "railway.route",
     "pk": 2,
     "fields": {
-      "name": "Route2",
-      "source": 3,
-      "destination": 4,
-      "distance": 294
+      "name": "Lviv-Odesa Line",
+      "source": 2,
+      "destination": 3,
+      "distance": 580
     }
   },
   {
     "model": "railway.route",
     "pk": 3,
     "fields": {
-      "name": "Route3",
+      "name": "Kharkiv-Dnipro Connector",
       "source": 4,
       "destination": 5,
-      "distance": 91
+      "distance": 360
     }
   },
   {
@@ -193,10 +193,7 @@
       "train": 5,
       "departure_time": "2025-06-25T11:35:31.731210",
       "arrival_time": "2025-06-25T14:35:31.731224",
-      "crew": [
-        2,
-        3
-      ]
+      "crew": [2, 3]
     }
   },
   {
@@ -207,10 +204,7 @@
       "train": 4,
       "departure_time": "2025-06-26T11:35:31.731236",
       "arrival_time": "2025-06-26T13:35:31.731241",
-      "crew": [
-        3,
-        4
-      ]
+      "crew": [3, 4]
     }
   },
   {
@@ -221,10 +215,7 @@
       "train": 2,
       "departure_time": "2025-06-27T11:35:31.731250",
       "arrival_time": "2025-06-27T16:35:31.731254",
-      "crew": [
-        4,
-        5
-      ]
+      "crew": [4, 5]
     }
   },
   {
@@ -235,10 +226,7 @@
       "train": 3,
       "departure_time": "2025-06-28T11:35:31.731263",
       "arrival_time": "2025-06-28T15:35:31.731266",
-      "crew": [
-        5,
-        1
-      ]
+      "crew": [5, 1]
     }
   },
   {
@@ -249,20 +237,17 @@
       "train": 4,
       "departure_time": "2025-06-29T11:35:31.731275",
       "arrival_time": "2025-06-29T15:35:31.731278",
-      "crew": [
-        1,
-        2
-      ]
+      "crew": [1, 2]
     }
   },
   {
     "model": "user.user",
     "pk": 1,
     "fields": {
-      "email": "user1@railway.com",
-      "first_name": "User1",
-      "last_name": "Surname1",
-      "password": "test_password",
+      "email": "ivan.petrenko@example.com",
+      "first_name": "Ivan",
+      "last_name": "Petrenko",
+      "password": "pbkdf2_sha256$260000$example$hash",
       "is_active": true
     }
   },
@@ -270,10 +255,10 @@
     "model": "user.user",
     "pk": 2,
     "fields": {
-      "email": "user2@railway.com",
-      "first_name": "User2",
-      "last_name": "Surname2",
-      "password": "test_password",
+      "email": "olena.kovalchuk@example.com",
+      "first_name": "Olena",
+      "last_name": "Kovalchuk",
+      "password": "pbkdf2_sha256$260000$example$hash",
       "is_active": true
     }
   },
@@ -281,10 +266,10 @@
     "model": "user.user",
     "pk": 3,
     "fields": {
-      "email": "user3@railway.com",
-      "first_name": "User3",
-      "last_name": "Surname3",
-      "password": "test_password",
+      "email": "maria.shevchenko@example.com",
+      "first_name": "Maria",
+      "last_name": "Shevchenko",
+      "password": "pbkdf2_sha256$260000$example$hash",
       "is_active": true
     }
   },
