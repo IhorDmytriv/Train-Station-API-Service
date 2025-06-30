@@ -377,7 +377,9 @@ class OrderViewSet(ModelViewSet):
         return self.serializer_class
 
     def get_queryset(self):
-        queryset = self.queryset.filter(user=self.request.user)
+        queryset = self.queryset
+        if not self.request.user.is_staff:
+            queryset = queryset.filter(user=self.request.user)
         if self.action in ["list", "retrieve"]:
             queryset = queryset.prefetch_related(
                 "tickets__journey__route",
