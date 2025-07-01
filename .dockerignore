@@ -1,10 +1,28 @@
-.venv
 Dockerfile
-.env
 docker-compose.yaml
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
+*.sqlite3
+*.log
+
+# Environment variables
+.env
+.env.example
+
+# Editor/IDE files
+.idea/
+.vscode/
+
+# Git
 .git/
+.gitignore
+
+# Virtual environment
+.venv/
 venv/
+env/
+
+media/
+files/media/
