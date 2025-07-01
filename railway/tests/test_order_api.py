@@ -130,9 +130,6 @@ class AuthenticatedOrderApiTests(TestCase):
         }
         response = self.client.post(ORDER_URL, payload)
 
-        print(response.status_code)
-        print(response.data)
-
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         order = Order.objects.get(id=response.data["id"])
         self.assertEqual(order.user, self.user)
